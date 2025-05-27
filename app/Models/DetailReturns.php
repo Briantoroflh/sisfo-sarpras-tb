@@ -7,19 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class DetailReturns extends Model
 {
     protected $table = 'detail_returns';
+    protected $primaryKey = 'id_detail_return';
     protected $fillable = [
-        'id_detail_return',
         'id_borrowed',
-        'id_items'
+        'status',
+        'return_image',
+        'soft_delete',
+        'description',
+        'date_return',
     ];
-
-    public function item()
-    {
-        return $this->belongsTo(Items::class, 'id_items');
-    }
 
     public function borrowed()
     {
-        return $this->belongsTo(Borrowed::class, 'id_borrowed');
+        return $this->belongsTo(Borrowed::class, 'id_borrowed', 'id_borrowed');
     }
 }

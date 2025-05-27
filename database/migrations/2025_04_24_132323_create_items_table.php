@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id('id_items');
             $table->string('item_name');
             $table->string('item_image')->nullable();
-            $table->string('code_items');
+            $table->string('code_items')->unique();
             $table->unsignedBigInteger('id_category');
             $table->integer('stock');
             $table->string('brand')->nullable();
-            $table->enum('status', ['used', 'unused']);
-            $table->enum('item_condition', ['good', 'broken']);
+            $table->enum('status', ['used', 'unused'])->default('unused');
+            $table->enum('item_condition', ['good', 'broken'])->default('good');
             $table->timestamps();
 
             $table->foreign('id_category')->references('id_category')->on('category_items')->onDelete('cascade');

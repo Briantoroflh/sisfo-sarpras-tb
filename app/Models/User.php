@@ -6,19 +6,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+    protected $primaryKey = 'id_user';
     protected $fillable = [
-        'id_user',
         'name',
         'email',
         'password',
@@ -50,8 +51,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function borrowings()
+    public function borrowed()
     {
-        return $this->hasMany(Borrowed::class, 'id_user');
+        return $this->hasMany(Borrowed::class, 'id_user', 'id_user');
     }
 }

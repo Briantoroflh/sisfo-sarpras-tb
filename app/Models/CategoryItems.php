@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class CategoryItems extends Model
 {
     protected $table = 'category_items';
+    protected $primaryKey = 'id_category';
     protected $fillable = [
-        'id_category',
-        'category_name',
-        'description'
+        'category_name'
     ];
 
     public function items()
     {
-        return $this->hasMany(Items::class, 'id_category');
+        return $this->hasMany(Items::class, 'id_category', 'id_category');
     }
 }

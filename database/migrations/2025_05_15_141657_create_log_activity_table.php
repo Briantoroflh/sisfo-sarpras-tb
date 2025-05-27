@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('borroweds', function (Blueprint $table) {
-            $table->id('id_borrowed');
+        Schema::create('log_activity', function (Blueprint $table) {
+            $table->id('id_log');
             $table->unsignedBigInteger('id_user');
-            $table->string('used_for');
-            $table->dateTime('date_borrowed');
+            $table->string('description');
             $table->timestamps();
 
-            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
+            $table->foreign('id_user')
+                ->references('id_user')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('borroweds');
+        Schema::dropIfExists('log_activity');
     }
 };

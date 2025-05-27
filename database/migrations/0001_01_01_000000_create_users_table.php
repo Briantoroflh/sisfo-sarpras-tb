@@ -15,12 +15,10 @@ return new class extends Migration
             $table->id('id_user');
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role');
-            $table->enum('class', ['X', 'XI', 'XII'])->nullable();
+            $table->enum('role', ['user', 'admin']);
+            $table->enum('class', ['X', 'XI', 'XII', 'ANON'])->nullable();
             $table->enum('major', ['RPL', 'PSPT', 'ANIMASI', 'TJKT', 'TE'])->nullable();
-            $table->rememberToken();
             $table->timestamps();
         });
 

@@ -13,12 +13,18 @@ return new class extends Migration
     {
         Schema::create('detail_returns', function (Blueprint $table) {
             $table->id('id_detail_return');
-            $table->unsignedBigInteger('id_borrowed');
-            $table->unsignedBigInteger('id_items');
+            $table->unsignedBigInteger('id_borrowed'); // Pastikan unsignedBigInteger
+            $table->enum('status', ['approve', 'not approve', 'pending'])->default('pending');
+            $table->string('return_image');
+            $table->string('description');
+            $table->tinyInteger('soft_delete')->default(0);
+            $table->dateTime('date_return');
             $table->timestamps();
 
-            $table->foreign('id_borrowed')->references('id_borrowed')->on('borroweds')->onDelete('cascade');
-            $table->foreign('id_items')->references('id_items')->on('items')->onDelete('cascade');
+            $table->foreign('id_borrowed')
+                ->references('id_borrowed')
+                ->on('borroweds')
+                ->onDelete('cascade');
         });
     }
 

@@ -7,20 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class DetailsBorrow extends Model
 {
     protected $table = 'details_borrows';
+    protected $primaryKey = 'id_details_borrow';
     protected $fillable = [
-        'id_details_borrow',
         'id_items',
-        'id_borrowed',
-        'amount'
+        'amount',
+        'used_for',
+        'class',
+        'date_borrowed',
+        'due_date',
     ];
 
     public function item()
     {
-        return $this->belongsTo(Items::class, 'id_items');
+        return $this->belongsTo(items::class, 'id_items');
     }
 
+    // Relasi ke borroweds
     public function borrowed()
     {
-        return $this->belongsTo(Borrowed::class, 'id_borrowed');
+        return $this->hasOne(Borrowed::class, 'id_details_borrow');
     }
 }
