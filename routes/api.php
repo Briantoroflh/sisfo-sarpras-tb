@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-
 Route::post('/login', [AuthController::class, 'Login']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -75,5 +74,4 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/return/{id}/approved', [ReturnController::class, 'approve']);
         Route::put('/return/{id}/reject', [ReturnController::class, 'reject']);
     });
-
 });

@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import Button from "../components/Button2";
 
 export default function UserPage() {
+    const baseurl = "http://127.0.0.1:8000/api";
     const [selectedRows, setSelectedRows] = React.useState([]);
     const [selected, setSelected] = useState("");
     const [user, setUser] = useState();
@@ -93,7 +94,10 @@ export default function UserPage() {
         setName(row.name);
         setEmail(row.email);
         setPassword(row.password);
-        setSelected(row.role);
+        const selectedRole = dataDropDown.find(
+            (option) => option.value === row.role
+        );
+        setSelected(selectedRole);
         setClass(row.class);
         setMajor(row.major);
     };
@@ -112,7 +116,7 @@ export default function UserPage() {
         try {
             await axios({
                 method: "POST",
-                url: "http://127.0.0.1:8000/api/users",
+                url: `${baseurl}/users`,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,
@@ -121,7 +125,7 @@ export default function UserPage() {
                     name: name,
                     email: email,
                     password: password,
-                    role: selected?.value,//basir nigga xixixixixixi
+                    role: selected?.value,
                     class: clas,
                     major: major,
                 },
@@ -152,7 +156,7 @@ export default function UserPage() {
         try {
             await axios({
                 method: "PUT",
-                url: "http://127.0.0.1:8000/api/users/" + id,
+                url: `${baseurl}/users/` + id,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,
@@ -192,7 +196,7 @@ export default function UserPage() {
         try {
             await axios({
                 method: "DELETE",
-                url: "http://127.0.0.1:8000/api/users/" + idToDelete,
+                url: `${baseurl}/users/` + idToDelete,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,
@@ -220,7 +224,7 @@ export default function UserPage() {
     const getUsers = async () => {
         await axios({
             method: "GET",
-            url: "http://127.0.0.1:8000/api/users",
+            url: `${baseurl}/users`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token,

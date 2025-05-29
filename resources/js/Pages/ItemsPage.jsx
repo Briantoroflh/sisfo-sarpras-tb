@@ -7,6 +7,7 @@ import DataTable from "react-data-table-component";
 import Dropdown from "../components/Dropdown";
 
 export default function ItemsPage() {
+    const baseurl = "http://127.0.0.1:8000/api";
     const [items, setItems] = useState();
     const [id, setId] = useState(null);
     const [itemName, setItemName] = useState("");
@@ -155,7 +156,7 @@ export default function ItemsPage() {
     const getAllCategory = async () => {
         await axios({
             method: "GET",
-            url: "http://127.0.0.1:8000/api/category-items",
+            url: `${baseurl}/category-items`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token,
@@ -174,7 +175,7 @@ export default function ItemsPage() {
     const getAllItems = async () => {
         await axios({
             method: "GET",
-            url: "http://127.0.0.1:8000/api/items",
+            url: `${baseurl}/items`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token,
@@ -190,7 +191,7 @@ export default function ItemsPage() {
         try {
             await axios({
                 method: "POST",
-                url: "http://127.0.0.1:8000/api/items",
+                url: `${baseurl}/items`,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,
@@ -229,7 +230,7 @@ export default function ItemsPage() {
         try {
             await axios({
                 method: "PUT",
-                url: "http://127.0.0.1:8000/api/items/" + id,
+                url: `${baseurl}/items/` + id,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,
@@ -270,7 +271,7 @@ export default function ItemsPage() {
         try {
             await axios({
                 method: "DELETE",
-                url: "http://127.0.0.1:8000/api/items/" + idToDelete,
+                url: `${baseurl}/items/` + idToDelete,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,

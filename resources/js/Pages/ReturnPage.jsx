@@ -7,6 +7,7 @@ import RedButton from "../components/RedButton";
 import GreenButton from "../components/GreenButton";
 
 export default function ReturnPage() {
+    const baseurl = "http://127.0.0.1:8000/api";
     const [returns, setReturns] = useState();
     const titleTable = <h2 className="font-medium">Pinjaman</h2>;
     const token = localStorage.getItem("token");
@@ -17,7 +18,7 @@ export default function ReturnPage() {
     const getAllReturn = async () => {
         await axios({
             method: "GET",
-            url: "http://127.0.0.1:8000/api/return",
+            url: `${baseurl}/return`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token

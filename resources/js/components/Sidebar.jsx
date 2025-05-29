@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SidebarItem from "./Sidebar-item";
 import {
     LayoutDashboard,
@@ -10,22 +10,31 @@ import {
     LogOut,
 } from "lucide-react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Sidebar = ({ children }) => {
     const token = localStorage.getItem("token");
 
+    const tokenSplit = token.split("|");
+    const mySplitToken = tokenSplit[0];
+
     const logout = async () => {
         await axios({
             method: "DELETE",
-            url: "http://127.0.0.1:8000/api/logout/{id}",
+            url: "http://127.0.0.1:8000/api/logout/" + mySplitToken,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token,
-            }
+            },
         }).then((response) => {
-
+            if (response.status === 200) {
+                const { message } = response.data;
+                toast.success(message);
+                localStorage.removeItem("token");
+                window.location.reload();
+            }
         });
-    }
+    };
 
     return (
         <div className="flex h-screen">
@@ -69,13 +78,14 @@ const Sidebar = ({ children }) => {
                     />
                     <SidebarItem
                         icon={<CircleArrowDown size={20} />}
-                        text={"Harinegro"}
+                        text={"Pengembalian"}
                         href={"/return-items"}
                     />
                     <div className="mt-8 text-red-700">
                         <SidebarItem
                             icon={<LogOut size={20} />}
                             text={"Logout"}
+                            onClick={logout}
                         />
                     </div>
                 </div>

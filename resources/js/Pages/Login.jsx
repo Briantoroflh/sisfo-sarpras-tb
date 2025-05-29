@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import { toast } from "react-toastify";
 
 export default function Login() {
+    const baseurl = "http://127.0.0.1:8000/api";
     const token = localStorage.getItem("token");
     if(token) {
         window.location.href = "/dashboard"; // Redirect to dashboard if token exists
@@ -23,7 +24,7 @@ export default function Login() {
 
         try {
             const response = await axios.post(
-                "http://127.0.0.1:8000/api/login",
+                `${baseurl}/login`,
                 {
                     email: email,
                     password: password,

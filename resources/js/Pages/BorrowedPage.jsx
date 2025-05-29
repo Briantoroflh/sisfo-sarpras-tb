@@ -8,6 +8,7 @@ import GreenButton from "../components/GreenButton";
 import { toast } from "react-toastify";
 
 export default function BorrowedPage() {
+    const baseurl = "http://127.0.0.1:8000/api";
     const [borrowed, setBorrowed] = useState();
     const titleTable = <h2 className="font-medium">Pinjaman</h2>;
     const token = localStorage.getItem("token");
@@ -18,7 +19,7 @@ export default function BorrowedPage() {
     const getAllBorrowed = async () => {
         await axios({
             method: "GET",
-            url: "http://127.0.0.1:8000/api/borrowed",
+            url: `${baseurl}/borrowed`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token
@@ -33,7 +34,7 @@ export default function BorrowedPage() {
     const approve = async (id) => {
         await axios({
             method: "PUT",
-            url: `http://127.0.0.1:8000/api/borrowed/${id}/approved`,
+            url: `${baseurl}/borrowed/${id}/approved`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token
@@ -51,7 +52,7 @@ export default function BorrowedPage() {
     const reject = async (id) => {
         await axios({
             method: "PUT",
-            url: `http://127.0.0.1:8000/api/borrowed/${id}/reject`,
+            url: `${baseurl}/borrowed/${id}/reject`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token

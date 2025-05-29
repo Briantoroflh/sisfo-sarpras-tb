@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function CategoryPage() {
+    const baseurl = "http://127.0.0.1:8000/api";
     const [category, setCategory] = useState();
     const [selectedRows, setSelectedRows] = React.useState([]);
     const [toggleCleared, setToggleCleared] = React.useState(false);
@@ -20,7 +21,7 @@ export default function CategoryPage() {
     const getAllCategory = async () => {
         await axios({
             method: "GET",
-            url: "http://127.0.0.1:8000/api/category-items",
+            url: `${baseurl}/category-items`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token,
@@ -36,7 +37,7 @@ export default function CategoryPage() {
         try {
             await axios({
                 method: "POST",
-                url: "http://127.0.0.1:8000/api/category-items",
+                url: `${baseurl}/category-items`,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,
@@ -69,7 +70,7 @@ export default function CategoryPage() {
         try {
             await axios({
                 method: "PUT",
-                url: "http://127.0.0.1:8000/api/category-items/" + id,
+                url: `${baseurl}/category-items/` + id,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,
@@ -104,7 +105,7 @@ export default function CategoryPage() {
         try {
             await axios({
                 method: "DELETE",
-                url: "http://127.0.0.1:8000/api/category-items/" + idToDelete,
+                url: `${baseurl}/category-items/` + idToDelete,
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer " + token,

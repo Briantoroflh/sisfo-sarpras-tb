@@ -6,6 +6,7 @@ import DataTable from "react-data-table-component";
 import React from "react";
 
 export default function Dashboard() {
+    const baseurl = "http://127.0.0.1:8000/api";
     const token = localStorage.getItem("token");
     if (!token) {
         window.location.href = "/"; // Redirect to login if token does not exist
@@ -45,7 +46,7 @@ export default function Dashboard() {
     useEffect(() => {
         axios({
             method: "GET",
-            url: "http://127.0.0.1:8000/api/dashboard-admin",
+            url: `${baseurl}/dashboard-admin`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + token,

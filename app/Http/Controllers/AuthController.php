@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserLoginReq;
 use App\Http\Requests\UserRegisterReq;
+use App\Http\Resources\TokenRes;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
@@ -41,7 +42,7 @@ class AuthController extends Controller
 
             //membuat token laravel sanctum untuk login
             $token = $user->createToken('credential_token')->plainTextToken;
-        
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Login success!',
@@ -68,14 +69,15 @@ class AuthController extends Controller
         ]);
     }
 
-    public function Logout($tokenId): JsonResponse {
-       $token = PersonalAccessToken::find($tokenId);
-       
+    public function Logout($tokenId): JsonResponse
+    {
+        $token = PersonalAccessToken::find($tokenId);
+
         if (!$token) {
             return response()->json([
-                'status' => 404,
-                'message' => 'Token not found!'
-            ])->setStatusCode(404);
+                'status' => 401,
+                'message' => 'Unauthorized!'
+            ])->setStatusCode(401);
         }
 
         $token->delete();
@@ -84,5 +86,16 @@ class AuthController extends Controller
             'status' => 200,
             'message' => 'Logout success!'
         ])->setStatusCode(200);
+    }
+
+    public function allToken(): JsonResponse
+    {
+       $token = PersonalAccessToken::all();
+
+       return response()->json([
+        'status' => 200,
+        'message' => '',
+        'data' => TokenRes::collection($token)
+       ]);
     }
 }
