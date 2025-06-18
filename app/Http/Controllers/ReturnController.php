@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DetailReturnReq;
 use App\Http\Resources\ReturnRes;
+use App\Models\Borrowed;
 use App\Models\DetailReturns;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -50,6 +51,22 @@ class ReturnController extends Controller
             'status' => 200,
             'message' => '',
             'data' => new ReturnRes($return)
+        ], 200);
+    }
+
+    public function getReturnByUserId($id): JsonResponse {
+        $borrowed = Borrowed::find($id);
+        if(!$borrowed){
+            return response()->json([
+                'message' => "Borrow with id $id doesn't exist!"
+            ], 404);
+        }
+        $return = DetailReturns::where('id_borrowed', $borrowed->id_borrowed)->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => '',
+            'data' => ReturnRes::collection($return)
         ]);
     }
 
@@ -61,18 +78,18 @@ class ReturnController extends Controller
             $data['return_image'] = $request->file('return_image')->store('images', 'public');
         }
 
-        $return = DB::table('detail_returns')->insert([
+        $return = DetailReturns::create([
             'id_borrowed' => $data['id_borrowed'],
             'return_image' => $data['return_image'],
             'description' => $data['description'],
-            'date_return' => $data['']
+            'date_return' => $data['date_return']
         ]);
 
         return response()->json([
-            'status' => 200,
-            'message' => '',
+            'status' => 201,
+            'message' => 'Pengembalian berhasil!',
             'data' => new ReturnRes($return)
-        ]);
+        ],201);
     }
 
     public function approve($id): JsonResponse
@@ -86,7 +103,7 @@ class ReturnController extends Controller
             ])->setStatusCode(404);
         }
 
-        $return->update(['status' => 'approve']);
+        $return->update(['status' => 'approved']);
 
         return response()->json([
             'status' => 200,
@@ -106,8 +123,7 @@ class ReturnController extends Controller
         }
 
         $return->udpate([
-            'status' => 'not approve',
-            'soft_delete' => 1
+            'status' => 'not approved'
         ]);
 
         return response()->json([

@@ -7,6 +7,7 @@ use App\Http\Resources\BorrowedRes;
 use App\Http\Resources\DetailBorrowRes;
 use App\Models\Borrowed;
 use App\Models\DetailsBorrow;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,16 @@ class BorrowedController extends Controller
             'message' => '',
             'data' => BorrowedRes::collection($borrowed)
         ])->setStatusCode(200);
+    }
+
+    public function getBorrowByUser($id): JsonResponse {
+        $getBorrow = Borrowed::with(['detailsBorrow', 'user'])->where('id_user', $id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => '',
+            'data' => BorrowedRes::collection($getBorrow)
+        ], 200);
     }
 
     public function show($id): JsonResponse

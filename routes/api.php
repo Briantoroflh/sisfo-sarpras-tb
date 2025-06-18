@@ -32,11 +32,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //item users endpoint
         Route::get('/items', [ItemController::class, 'getAllItems']);
-        Route::get('/items/{id}', [ItemController::class, 'getItemById']);
+        Route::get('/items/{id}', [ItemController::class, 'getItemById'])->where('id','[0-9]+');
 
         //borrowed users endpoint
         Route::get('/borrowed', [BorrowedController::class, 'index']);
-        Route::get('/borrowed/{id}', [BorrowedController::class, 'getBorrowedById']);
+        Route::get('/borrowed/{id}', [BorrowedController::class, 'getBorrowedById'])->where('id', '[0-9]+');
+        Route::post('/borrowed', [BorrowedController::class, 'store']);
+        Route::get('/borrowed/{id}/user', [BorrowedController::class, 'getBorrowByUser'])->where('id','[0-9]+');
 
         //users endpoint
         Route::get('/users', [UserController::class, 'index']);
@@ -44,7 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //return user endpoint
         Route::get('/return', [ReturnController::class, 'getAllReturn']);
-        Route::get('/return/{id}', [ReturnController::class, 'getReturnById']);
+        Route::get('/return/{id}', [ReturnController::class, 'getReturnById'])->where('id', '[0-9]+');
+        Route::post('/return', [ReturnController::class, 'store']);
+        Route::get('/return/{id}/user', [ReturnController::class, 'getReturnByUserId'])->where('id', '[0-9]+');
     });
 
     Route::middleware('role:admin')->group(function () {

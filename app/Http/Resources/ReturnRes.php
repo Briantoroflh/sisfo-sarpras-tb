@@ -18,8 +18,7 @@ class ReturnRes extends JsonResource
             'id' => $this->id_detail_return,
             'image' => $this->return_image,
             'description' => $this->description,
-            'user' => $this->borrowed->user->name,
-            'item' => $this->borrowed->detailsBorrow->item->item_name,
+            'borrowed' => new BorrowedRes($this->borrowed),
             'date_returned' => $this->date_return,
             'status' => $this->status,
         ];

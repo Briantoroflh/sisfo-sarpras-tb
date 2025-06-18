@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('detail_returns', function (Blueprint $table) {
             $table->id('id_detail_return');
             $table->unsignedBigInteger('id_borrowed'); // Pastikan unsignedBigInteger
-            $table->enum('status', ['approve', 'not approve', 'pending'])->default('pending');
-            $table->string('return_image');
+            $table->enum('status', ['approved', 'not approved', 'pending'])->default('pending');
+            $table->string('return_image')->nullable();
             $table->string('description');
             $table->tinyInteger('soft_delete')->default(0);
             $table->dateTime('date_return');

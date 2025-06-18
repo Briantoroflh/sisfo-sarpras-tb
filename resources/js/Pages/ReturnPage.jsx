@@ -30,6 +30,42 @@ export default function ReturnPage() {
         });
     }
 
+    const approve = async (id) => {
+        await axios({
+            method: "PUT",
+            url: `${baseurl}/return/${id}/approved`,
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + token,
+            },
+        }).then((response) => {
+            if (response.status === 200) {
+                const { message } = response.data;
+
+                toast.success(message);
+                getAllReturn();
+            }
+        });
+    };
+
+    const reject = async (id) => {
+        await axios({
+            method: "PUT",
+            url: `${baseurl}/return/${id}/reject`,
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + token,
+            },
+        }).then((response) => {
+            if (response.status === 200) {
+                const { message } = response.data;
+
+                toast.success(message);
+                getAllReturn();
+            }
+        });
+    };
+
     const columns = [
         {
             name: "Gambar",

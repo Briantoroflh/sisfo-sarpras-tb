@@ -15,7 +15,7 @@ class DetailBorrowRes extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id_detail_borrowed,
+            'id' => $this->id_details_borrow,
             'item' => new ItemRes($this->item),
             'quantity' => $this->amount,
             'noted' => $this->used_for,

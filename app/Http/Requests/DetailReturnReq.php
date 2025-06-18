@@ -24,7 +24,7 @@ class DetailReturnReq extends FormRequest
     {
         return [
             'id_borrowed' => 'required|integer',
-            'return_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'return_image' => 'nullable|string',
             'description' => 'required|string|max:255',
             'date_return' => ['required', Rule::date()->format('Y-m-d')]
         ];

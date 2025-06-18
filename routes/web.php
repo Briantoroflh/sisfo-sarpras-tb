@@ -7,10 +7,7 @@ use App\Http\Controllers\DahsboardController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\UserController;
-use App\Models\CategoryItems;
-use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', [AuthController::class, 'index']);
 

@@ -23,7 +23,7 @@ class DetailBorrowReq extends FormRequest
     public function rules(): array
     {
         return [
-            'id_items' => 'required|integer|exists:items,id_item',
+            'id_items' => 'required|integer|exists:items,id_items',
             'amount' => 'required|integer|min:1',
             'used_for' => 'required|string|max:255',
             'class' => 'required|string|max:255',

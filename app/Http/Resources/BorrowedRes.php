@@ -16,8 +16,8 @@ class BorrowedRes extends JsonResource
     {
         return [
             'id' => $this->id_borrowed,
-            'users' => $this->user->name,
-            'item' => $this->detailsBorrow->item->item_name,
+            'users' => new UserResource($this->user),
+            'detailBorrow' => new DetailBorrowRes($this->detailsBorrow),
             'borrowed_date' => $this->detailsBorrow->date_borrowed,
             'due_date' => $this->detailsBorrow->due_date,
             'status' => $this->status

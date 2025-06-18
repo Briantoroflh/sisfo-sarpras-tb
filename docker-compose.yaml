@@ -1,9 +1,0 @@
-version: '3.8'
-
-services:
-  db:
-    image: mariadb:latest
-    environment:
-      MARIADB_ROOT_PASSWORD: check_aja
-    ports:
-      - "3306:3306"

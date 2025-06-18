@@ -36,7 +36,7 @@ class ItemController extends Controller
 
     public function getItemById($id): JsonResponse
     {
-        $items = Items::with('category')->where('id_item', $id)->first();
+        $items = Items::with('category')->where('id_items', $id)->first();
 
         if(!$items){
             return response()->json([

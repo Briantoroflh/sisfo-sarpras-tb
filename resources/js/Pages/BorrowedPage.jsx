@@ -147,8 +147,8 @@ export default function BorrowedPage() {
     const data = Array.isArray(borrowed)
         ? borrowed.map((bor) => ({
               id: bor.id,
-              name: bor.users,
-              item: bor.item,
+              name: bor.users.name,
+              item: bor.detailBorrow.item.item_name,
               date_borrowed: bor.borrowed_date,
               due_date: bor.due_date,
               status: bor.status
