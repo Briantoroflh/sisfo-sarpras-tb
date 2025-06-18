@@ -16,20 +16,69 @@ export default function BorrowedPage() {
         window.location.href = "/"; // Redirect to login if token does not exist
     }
 
+    function convertArrayOfObjectsToCSV(array) {
+        let result;
+
+        const columnDelimiter = ",";
+        const lineDelimiter = "\n";
+        const keys = Object.keys(data[0]);
+
+        result = "";
+        result += keys.join(columnDelimiter);
+        result += lineDelimiter;
+
+        array.forEach((item) => {
+            let ctr = 0;
+            keys.forEach((key) => {
+                if (ctr > 0) result += columnDelimiter;
+
+                result += item[key];
+
+                ctr++;
+            });
+            result += lineDelimiter;
+        });
+
+        return result;
+    }
+
+    // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
+    function downloadCSV(array) {
+        const link = document.createElement("a");
+        let csv = convertArrayOfObjectsToCSV(array);
+        if (csv == null) return;
+
+        const filename = "Laporan-sisfo.csv";
+
+        if (!csv.match(/^data:text\/csv/i)) {
+            csv = `data:text/csv;charset=utf-8,${csv}`;
+        }
+
+        link.setAttribute("href", encodeURI(csv));
+        link.setAttribute("download", filename);
+        link.click();
+    }
+
+    const Export = ({ onExport }) => (
+        <Button2 onClick={(e) => onExport(e.target.value)} text={"Export"}>
+            Export
+        </Button2>
+    );
+
     const getAllBorrowed = async () => {
         await axios({
             method: "GET",
             url: `${baseurl}/borrowed`,
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + token
+                Authorization: "Bearer " + token,
             },
         }).then((response) => {
-            if(response.status === 200) {
-                setBorrowed(response.data.data)
+            if (response.status === 200) {
+                setBorrowed(response.data.data);
             }
         });
-    }
+    };
 
     const approve = async (id) => {
         await axios({
@@ -37,17 +86,17 @@ export default function BorrowedPage() {
             url: `${baseurl}/borrowed/${id}/approved`,
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + token
-            }
+                Authorization: "Bearer " + token,
+            },
         }).then((response) => {
-            if(response.status === 200){
-                const {message} = response.data
+            if (response.status === 200) {
+                const { message } = response.data;
 
                 toast.success(message);
                 getAllBorrowed();
             }
         });
-    }
+    };
 
     const reject = async (id) => {
         await axios({
@@ -55,17 +104,17 @@ export default function BorrowedPage() {
             url: `${baseurl}/borrowed/${id}/reject`,
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + token
-            }
+                Authorization: "Bearer " + token,
+            },
         }).then((response) => {
-            if(response.status === 200){
-                const {message} = response.data
+            if (response.status === 200) {
+                const { message } = response.data;
 
                 toast.success(message);
                 getAllBorrowed();
             }
         });
-    }
+    };
 
     const columns = [
         {
@@ -110,13 +159,7 @@ export default function BorrowedPage() {
                         colorClass = "bg-gray-400";
                 }
 
-                return (
-                    <span
-                        className={`${colorClass}`}
-                    >
-                        {row.status}
-                    </span>
-                );
+                return <span className={`${colorClass}`}>{row.status}</span>;
             },
             sortable: true,
         },
@@ -151,13 +194,18 @@ export default function BorrowedPage() {
               item: bor.detailBorrow.item.item_name,
               date_borrowed: bor.borrowed_date,
               due_date: bor.due_date,
-              status: bor.status
+              status: bor.status,
           }))
         : [];
 
+    const actionsMemo = React.useMemo(
+        () => <Export onExport={() => downloadCSV(data)} />,
+        []
+    );
+
     useEffect(() => {
         getAllBorrowed();
-    }, [])
+    }, []);
 
     return (
         <DashboardLayout>
@@ -173,6 +221,7 @@ export default function BorrowedPage() {
                         title={titleTable}
                         columns={columns}
                         data={data}
+                        actions={actionsMemo}
                         keyField="id"
                         selectableRows
                         pagination

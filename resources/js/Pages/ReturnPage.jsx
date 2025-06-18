@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
 import RedButton from "../components/RedButton";
 import GreenButton from "../components/GreenButton";
+import Button2 from "../components/Button2";
 
 export default function ReturnPage() {
     const baseurl = "http://127.0.0.1:8000/api";
@@ -15,20 +16,69 @@ export default function ReturnPage() {
         window.location.href = "/"; // Redirect to login if token does not exist
     }
 
+    function convertArrayOfObjectsToCSV(array) {
+        let result;
+
+        const columnDelimiter = ",";
+        const lineDelimiter = "\n";
+        const keys = Object.keys(data[0]);
+
+        result = "";
+        result += keys.join(columnDelimiter);
+        result += lineDelimiter;
+
+        array.forEach((item) => {
+            let ctr = 0;
+            keys.forEach((key) => {
+                if (ctr > 0) result += columnDelimiter;
+
+                result += item[key];
+
+                ctr++;
+            });
+            result += lineDelimiter;
+        });
+
+        return result;
+    }
+
+    // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
+    function downloadCSV(array) {
+        const link = document.createElement("a");
+        let csv = convertArrayOfObjectsToCSV(array);
+        if (csv == null) return;
+
+        const filename = "Laporan-sisfo.csv";
+
+        if (!csv.match(/^data:text\/csv/i)) {
+            csv = `data:text/csv;charset=utf-8,${csv}`;
+        }
+
+        link.setAttribute("href", encodeURI(csv));
+        link.setAttribute("download", filename);
+        link.click();
+    }
+
+    const Export = ({ onExport }) => (
+        <Button2 onClick={(e) => onExport(e.target.value)} text={"Export"}>
+            Export
+        </Button2>
+    );
+
     const getAllReturn = async () => {
         await axios({
             method: "GET",
             url: `${baseurl}/return`,
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + token
-            }
+                Authorization: "Bearer " + token,
+            },
         }).then((response) => {
-            if(response.status === 200){
-                setReturns(response.data.data)
+            if (response.status === 200) {
+                setReturns(response.data.data);
             }
         });
-    }
+    };
 
     const approve = async (id) => {
         await axios({
@@ -67,17 +117,6 @@ export default function ReturnPage() {
     };
 
     const columns = [
-        {
-            name: "Gambar",
-            selector: (row) => row.img,
-            cell: (row) => (
-                <img
-                    src={`storage/${row.img}`}
-                    className="w-16 h-16 p-1 object-cover rounded-md"
-                />
-            ),
-            sortable: true,
-        },
         {
             name: "Deskripsi",
             selector: (row) => row.desc,
@@ -154,17 +193,32 @@ export default function ReturnPage() {
         },
     ];
 
+    // const data = Array.isArray(returns)
+    //     ? returns.map((ret) => ({
+    //           id: ret.id,
+    //           desc: ret.description,
+    //           user: ret.user,
+    //           item: ret.item,
+    //           tgl: ret.date_returned,
+    //           status: ret.status,
+    //       }))
+    //     : [];
+
     const data = Array.isArray(returns)
         ? returns.map((ret) => ({
               id: ret.id,
-              img: ret.image,
               desc: ret.description,
-              user: ret.user,
-              item: ret.item,
+              user: ret.borrowed?.users?.name || "-",
+              item: ret.borrowed?.detailBorrow?.item?.item_name || "-",
               tgl: ret.date_returned,
               status: ret.status,
           }))
         : [];
+
+    const actionsMemo = React.useMemo(
+        () => <Export onExport={() => downloadCSV(data)} />,
+        []
+    );
 
     useEffect(() => {
         getAllReturn();
@@ -185,6 +239,7 @@ export default function ReturnPage() {
                         columns={columns}
                         data={data}
                         keyField="id"
+                        actions={actionsMemo}
                         selectableRows
                         //onSelectedRowsChange={handleRowSelected}
                         pagination
